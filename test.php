@@ -39,8 +39,7 @@ function login($username, $password) {
 
     // Close connection
     $conn->close();
-}<?php
-
+}
 
 $username = $_POST['username'];
 $password = $_POST['password'];
