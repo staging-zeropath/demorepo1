@@ -19,17 +19,23 @@ function login($username, $password) {
     // admin
     // gdhas' OR 1=1 #
 
-    // Query database
-    $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-
-    $result = $conn->query($query);
+    // Prepare and bind
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
+    $stmt->bind_param("ss", $username, $password);
+    
+    // Execute the statement
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     // Check if user exists
     if ($result->num_rows > 0) {
-        echo "Welcome, $username!";
+        echo "Welcome, " . htmlspecialchars($username) . "!";
     } else {
-        echo "$query Invalid username or password.";
+        echo "Invalid username or password.";
     }
+
+    // Close statement
+    $stmt->close();
 
     // Close connection
     $conn->close();
